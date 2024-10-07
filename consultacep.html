@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div id="demo">
+    <h1>The XMLHttpRequest Object</h1>
+    <input type="text" name="cep" id="cep" placeholder="Digite seu CEP">
+    <button type="button" onclick="loadDoc()">Pesquisar CEP</button>
+    <br>
+    <input type="text" id="logradouro" placeholder="Logradouro">
+    <br>
+    <input type="text" id="complemento" placeholder="Complemento">
+    <br>
+    <input type="text" id="bairro" placeholder="Bairro">
+    <br>
+    <input type="text" id="localidade" placeholder="Cidade">
+    <br>
+    <input type="text" id="uf" placeholder="UF">
+</div>
+<script>
+function loadDoc() {
+    // recupera o CEP que foi digitado pelo usuário
+  let cep =  parseInt(document.getElementById("cep").value); 
+
+    // cria objeto XMLHttpRequest que servirá para controlar a comunicação
+    // do navegador com o servidor (site do ViaBrasil)
+  let xhttp = new XMLHttpRequest();
+
+  // prepara o tratamento da resposta 
+  // deve ser feito antes de preparar e mandar a requisição
+  xhttp.onreadystatechange = function() {
+      // readState 4 = resposta recebida
+      // status 200 = resposta OK
+      console.log(this.readyState);
+    if (this.readyState == 4 && this.status == 200) {
+      let endereco = JSON.parse(this.responseText); 
+      document.getElementById("logradouro").value=endereco.logradouro;
+      document.getElementById("complemento").value=endereco.complemento ;
+      document.getElementById("bairro").value=endereco.bairro ;
+      document.getElementById("localidade").value=endereco.localidade ;
+      document.getElementById("uf").value=endereco.uf ;
+      
+     // o que ocorrerá se retirar o comentário da linha abaixo? 
+     //document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  // prepara a solicitação
+  console.log('antes do open cep:'+cep);
+  xhttp.open("GET", "https://viacep.com.br/ws/"+cep+"/json", true);
+  // envia a solicitação
+  console.log('antes do send');
+  xhttp.send();
+  console.log('depois do send');
+}
+</script>
+
+</body>
+</html>
