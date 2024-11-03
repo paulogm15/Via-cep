@@ -72,16 +72,71 @@ As funções **async/await** simplificam o uso de Promises, permitindo um estilo
 
 ## 📋 Outros Tópicos
 
-### 1. **Hosting (Hospedagem de Aplicações)**
+### 1. **Hoisting**
 
-- **Descrição**: Processo de publicação de sites ou aplicações em servidores para torná-los acessíveis na web.
-- **Exemplos de Serviços**: Vercel, Netlify, Heroku, AWS, DigitalOcean.
+**Descrição**: Hoisting refere-se ao processo pelo qual o interpretador parece mover a declaração de funções, variáveis, classes ou importações para o topo do escopo, antesda execução do código.
+Hoisting não é um termo definido na especificação do ECMAScript. A especificação define um grupo de declarações como HoistableDeclararion, mas isso inclui apenas declarações de `function`, `function*`, `async function`, e `async function*`. O hoisting também costuma ser considerado um recurso das declarações `var`, embora de uma forma diferente. Em termos coloquiais, qualquer um dos comportamentos a seguir pode ser considerado como hoisting:
 
-|**Vantagens**|**Desvantagens**|
-|---|---|
-|Acesso global e disponibilidade online.|Pode envolver custos contínuos.|
-|Diversos tipos de hospedagem para diferentes necessidades (compartilhada, VPS, cloud).|Hospedagem compartilhada pode afetar desempenho.|
-|Escalabilidade com servidores em nuvem.|Complexidade na configuração em VPS ou Cloud.|
+1. Ser capaz de user o valor de uma variável em seu escopo antes da linha em que é declarada. ("Value hoisting")
+2. Poder fazer referência a uma variável em seu escopo antes da linha em que ela é declarada, sem lançar um `ReferenceError`, mas o valor é sempre `undefined` ("Declaration hoisting")
+3. A declaração da variável causa alterações de comportamento em seu escopo antes da linha em que é declarada
+4. Os efeitos colaterais de uma declaração são produzidos antes da avaliação do restante do código que a contém
+
+
+##### **Resumo dos Tipos de Hoisting**
+
+| **Tipo**                 | **Hoisting**     | **Valor Inicial**                             |
+| ------------------------ | ---------------- | --------------------------------------------- |
+| `var`                    | Sim              | `undefined`                                   |
+| `let`                    | Sim              | Erro se acessada antes da inicialização (TDZ) |
+| `const`                  | Sim              | Erro se acessada antes da inicialização (TDZ) |
+| **Function Declaration** | Sim              | Função disponível                             |
+| **Function Expression**  | Sim (como `var`) | `undefined` até ser atribuída                 |
+
+---
+
+## **Exemplos**
+
+1. **`var`**
+```javascript
+console.log(myVar); // undefined
+var myVar = 5;
+console.log(myVar); // 5
+```
+- **Declaração içada, mas valor inicial é `undefined`**
+
+---
+
+2. `let` e `const`
+```javascript
+console.log(myLet); // Erro: Cannot access 'myLet' before initialization
+let myLet = 10;
+```
+- Variáveis são içadas, mas entram em **"zona morta temporal" (TDZ)** e geram erro se acessadas antes da inicialização.
+
+---
+
+3. **Function Declaration**
+```javascript
+sayHello(); // Funciona: "Hello!"
+
+function sayHello() {
+  console.log("Hello!");
+}
+```
+- **Funções declaradas** são içadas e podem ser chamadas antes da definição.
+
+---
+
+4. **Function Expression**
+```javascript
+sayHello(); // Erro: sayHello não é uma função
+
+var sayHello = function () {
+  console.log("Hello!");
+};
+```
+- A variável é içada, mas seu valor inicial é `undefined`. Por isso, chamar a função antes da atribuição gera erro.
 
 ---
 
@@ -160,7 +215,17 @@ somaArrow(1, 2, 3);
   - Funções construtoras (usadas com `new`).
   - Funções que precisam acessar o objeto `arguments`.
 
+|**Vantagens**|**Desvantagens**|### 1. **Hosting (Hospedagem de Aplicações)**
+
+- **Descrição**: Processo de publicação de sites ou aplicações em servidores para torná-los acessíveis na web.
+- **Exemplos de Serviços**: Vercel, Netlify, Heroku, AWS, DigitalOcean.
+
 |**Vantagens**|**Desvantagens**|
+|---|---|
+|Acesso global e disponibilidade online.|Pode envolver custos contínuos.|
+|Diversos tipos de hospedagem para diferentes necessidades (compartilhada, VPS, cloud).|Hospedagem compartilhada pode afetar desempenho.|
+|Escalabilidade com servidores em nuvem.|Complexidade na configuração em VPS ou Cloud.|
+
 |---|---|
 |Sintaxe curta e fácil de ler.|Não podem ser usadas como funções construtoras.|
 |Mantêm o contexto de `this` do escopo externo.|Não possuem o objeto `arguments`.|
@@ -223,6 +288,7 @@ contador1(); // 2
 - [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
 - [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 - [Async/Await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)
+- [Hoisting - MDN](https://developer.mozilla.org/en-US/docs/Glossary/Hoisting)
 - [Arrow Functions - MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
 - [Destructuring - MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)
 - [Closures - MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures)
